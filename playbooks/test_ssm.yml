@@ -1,0 +1,16 @@
+---
+- name: Test SSM Command
+  hosts: localhost
+  gather_facts: no
+
+  vars_files:
+    - ../group_vars/aws.yml
+
+  tasks:
+    - name: Run hostname
+      shell: |
+        aws ssm send-command \
+        --document-name "AWS-RunShellScript" \
+        --targets "Key=instanceIds,Values={{ instance_id }}" \
+        --parameters '{"commands":["hostname"]}' \
+        --region {{ region }}
