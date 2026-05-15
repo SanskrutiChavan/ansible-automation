@@ -7,8 +7,13 @@
     - ../group_vars/aws.yml
 
   tasks:
-    - name: Run hostname
+
+    - name: Run hostname using SSM
       shell: |
+        export PATH=/tmp/pip-install/bin:$PATH
+        export PYTHONUSERBASE=/tmp/pip-install
+        export PYTHONPATH=/tmp/pip-install/lib/python3.9/site-packages:$PYTHONPATH
+
         aws ssm send-command \
         --document-name "AWS-RunShellScript" \
         --targets "Key=instanceIds,Values={{ instance_id }}" \
